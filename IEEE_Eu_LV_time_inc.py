@@ -40,6 +40,7 @@ for i in range(num_loads):
     loads_df['Profile_number'][i] = profile # asign the corresponding load profile to the load i
 # ------------------------------------------------- #
 
+
 # ---- miscelaneus matrices needed for losses methods ---- #
 print('Computing needed matrices')
 zabc_lines, zabc_trafos = get_zabc(net)
@@ -49,6 +50,12 @@ rabc_trafos = np.real(zabc_trafos)
 mat_incide = mat_incid(net)
 mat_gamma =np.linalg.inv(mat_incide)
 # -------------------------------------------------------- #
+
+# ----------- uncomment to apply load increase of 15% --------------#
+net.asymmetric_load.p_c_mw = net.asymmetric_load.p_c_mw*1.15
+net.asymmetric_load.q_c_mvar = net.asymmetric_load.q_c_mvar*1.15
+# ------------------------------------------------------------------#
+
 
 # ---- execution of 3ph PF for entire day and post procesing ---- # 
 for i in range(1440): # (1440) to consider the entire day
@@ -71,15 +78,16 @@ for i in range(1440): # (1440) to consider the entire day
     # --------------------------------------------- #
 
     # ---- saving current time results in csv files ---- #
-    net.res_ext_grid_3ph.to_csv(f'IEEE_lv_time/pp/ext_grid_pp/ext_grid_pp_{i}.csv')
-    net.res_bus_3ph.to_csv(f'IEEE_lv_time/pp/buses_pp/buses_pp_{i}.csv')
-    net.res_line_3ph.to_csv(f'IEEE_lv_time/pp/line_pp/line_pp_{i}.csv')
-    net.res_trafo_3ph.to_csv(f'IEEE_lv_time/pp/trafo_pp/trafo_pp_{i}.csv')
-    net.res_asymmetric_load_3ph.to_csv(f'IEEE_lv_time/pp/load_pp/load_pp_{i}.csv')
+    net.res_ext_grid_3ph.to_csv(f'IEEE_lv_time/load_increase/pp/ext_grid_pp/ext_grid_pp_{i}.csv')
+    net.res_bus_3ph.to_csv(f'IEEE_lv_time/load_increase/pp/buses_pp/buses_pp_{i}.csv')
+    net.res_line_3ph.to_csv(f'IEEE_lv_time/load_increase/pp/line_pp/line_pp_{i}.csv')
+    net.res_trafo_3ph.to_csv(f'IEEE_lv_time/load_increase/pp/trafo_pp/trafo_pp_{i}.csv')
+    net.res_asymmetric_load_3ph.to_csv(f'IEEE_lv_time/load_increase/pp/load_pp/load_pp_{i}.csv')
 
-    res_rlcp_lines.to_csv(f'IEEE_lv_time/rlcp/line_rlcp/line_rlcp_{i}.csv')
-    res_rlcp_trafos.to_csv(f'IEEE_lv_time/rlcp/trafo_rlcp/trafo_rlcp_{i}.csv')
+    res_rlcp_lines.to_csv(f'IEEE_lv_time/load_increase/rlcp/line_rlcp/line_rlcp_{i}.csv')
+    res_rlcp_trafos.to_csv(f'IEEE_lv_time/load_increase/rlcp/trafo_rlcp/trafo_rlcp_{i}.csv')
 
-    losses_k.to_csv(f'IEEE_lv_time/bcdla/node_bcdla/nodes_bcdla_{i}.csv')
+    losses_k.to_csv(f'IEEE_lv_time/load_increase/bcdla/node_bcdla/nodes_bcdla_{i}.csv')
     # -------------------------------------------------- #
 # --------------------------------------------------------------- #
+
